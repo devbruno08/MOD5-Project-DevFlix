@@ -2,49 +2,45 @@ import { IUserEntity } from '../entities/user.entity';
 import { UserDto } from './dto/userInput.dto';
 import { randomUUID } from 'node:crypto';
 import { PartialUserDto } from './dto/partialUserInput.dto';
+import { UserRepository } from '../user.repository';
 
 export class UserService {
-  private users: IUserEntity[] = [];
+  constructor(private readonly userRepository: UserRepository) {}
 
   async createUser(user: UserDto): Promise<IUserEntity> {
     const userEntity = { ...user, id: randomUUID() };
-    this.users.push(userEntity);
-    return userEntity;
+    if(user.password.length <= 7) {
+      throw new Error('Invalid password')
+    }
+    const createdUser = await this.userRepository.createUser(userEntity);
+    return createdUser;
   }
 
   async updateUser(userData: PartialUserDto): Promise<IUserEntity> {
-    this.users.map((user, index) => {
-      if (user.id === userData.id) {
-        const UpdatedUser = Object.assign(user, userData);
-        this.users.splice(index, 1, UpdatedUser);
-      }
-    });
-    const updatedUser = this.users.find((user) => user.id === userData.id);
+    const updatedUser = await this.userRepository.updateUser(userData);
     return updatedUser;
   }
 
   async getAllUsers(): Promise<IUserEntity[]> {
-    return this.users;
+    return await this.userRepository.findAllUsers();
   }
 
-  async deleteUserById(Id: string): Promise<boolean> {
-    const User = this.users.find((user) => user.id === Id);
-    if (!User) {
+  async deleteUserById(userId: string): Promise<boolean> {
+    try {
+      const User = this.userRepository.deleteUser(userId);
+      if (User) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
       return false;
     }
-    this.users.map((user, index) => {
-      if (user.id === Id) {
-        this.users.splice(index, 1);
-      }
-    });
-    return true;
   }
 
-  async getUserById(Id: string): Promise<IUserEntity> {
-    const User = this.users.find((user) => user.id === Id);
-    if (!User) {
-      throw new Error('User not found');
-    }
-    return User;
+  async getUserById(userId: string): Promise<IUserEntity> {
+    const UserById = await this.userRepository.findUserById(userId);
+    return UserById;
   }
 }

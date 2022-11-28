@@ -25,12 +25,12 @@ export class UserRepository {
     return DeleteUser;
   }
 
-  async findAllUser(): Promise<IUserEntity[]> {
+  async findAllUsers(): Promise<IUserEntity[]> {
     const AllUsers = await this.prisma.user.findMany();
     return AllUsers;
   }
 
-  async findUserByIdUser(id: string): Promise<IUserEntity> {
+  async findUserById(id: string): Promise<IUserEntity> {
     const UserById = await this.prisma.user.findUniqueOrThrow({
       where: { id: id },
     });
