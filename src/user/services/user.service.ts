@@ -11,8 +11,8 @@ export class UserService {
 
   async createUser(user: UserDto): Promise<IUserEntity> {
     const userEntity = { ...user, id: randomUUID() };
-    if(user.password.length <= 7) {
-      throw new Error('Invalid password')
+    if (user.password.length <= 7) {
+      throw new Error('Invalid password');
     }
     const createdUser = await this.userRepository.createUser(userEntity);
     return createdUser;
@@ -29,7 +29,7 @@ export class UserService {
 
   async deleteUserById(userId: string): Promise<boolean> {
     try {
-      const User = this.userRepository.deleteUser(userId);
+      const User = await this.userRepository.deleteUser(userId);
       if (User) {
         return true;
       } else {
