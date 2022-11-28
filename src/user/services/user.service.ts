@@ -26,4 +26,17 @@ export class UserService {
   async getAllUsers(): Promise<IUserEntity[]> {
     return this.users;
   }
+
+  async deleteUserById(Id: string): Promise<boolean> {
+    const User = this.users.find((user) => user.id === Id);
+    if (!User) {
+      return false;
+    }
+    this.users.map((user, index) => {
+      if (user.id === Id) {
+        this.users.splice(index, 1);
+      }
+    });
+    return true;
+  }
 }
