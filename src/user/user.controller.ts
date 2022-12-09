@@ -16,6 +16,7 @@ import { UserDto } from './services/dto/userInput.dto';
 import { UserService } from './services/user.service';
 import { Response } from 'express'
 import { send } from 'process';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 
 @Controller()
 export class UserController {
@@ -51,7 +52,7 @@ export class UserController {
 
       response.status(201).send(result);
     } catch (err) {
-      throw new BadRequestException(err.message);
+      HandleException(err);
     }
   }
 
