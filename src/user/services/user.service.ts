@@ -13,7 +13,7 @@ export class UserService {
   async createUser(user: UserDto): Promise<IUserEntity> {
     const userEntity = { ...user, id: randomUUID() };
     if (user.password.length <= 7) {
-      throw { message: 'Invalid Password', exception: Exceptions.InvalidData };
+      throw { message: 'Invalid Password', exception: Exceptions.InvalidData, };
     }
     const createdUser = await this.userRepository.createUser(userEntity);
     return createdUser;

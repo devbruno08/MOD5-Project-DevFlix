@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -15,7 +14,6 @@ import { PartialUserDto } from './services/dto/partialUserInput.dto';
 import { UserDto } from './services/dto/userInput.dto';
 import { UserService } from './services/user.service';
 import { Response } from 'express'
-import { send } from 'process';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 
 @Controller()
@@ -32,7 +30,7 @@ export class UserController {
     try {
       return await this.service.getUserById(Id);
     } catch (err) {
-      console.log(err);
+      HandleException(err);
     }
   }
 
@@ -61,7 +59,7 @@ export class UserController {
     try {
       return await this.service.updateUser(userData);
     } catch (err) {
-      console.log(err);
+      HandleException(err);
     }
   }
 
