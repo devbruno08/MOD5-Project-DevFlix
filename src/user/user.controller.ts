@@ -14,8 +14,10 @@ import { UserDto } from './services/dto/userInput.dto';
 import { UserService } from './services/user.service';
 import { Response } from 'express'
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller()
+@ApiTags('User')
+@Controller('User')
 export class UserController {
   constructor(private service: UserService) {}
 
@@ -35,16 +37,18 @@ export class UserController {
 
   @Post()
   async createUser(
-    @Body() { cpf, email, password, name, profiles, role }: UserDto,
+    @Body() { cpf, email, password, name, role }: UserDto,
     @Res() response: Response,
-  ) {
+  
+    ) 
+    : Promise<void>
+    {
     try {
       const result = await this.service.createUser({
         cpf,
         email,
         password,
         name,
-        profiles,
         role,
       });
 

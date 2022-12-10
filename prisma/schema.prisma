@@ -11,12 +11,30 @@ datasource db {
 }
 
 model User {
-  id        String   @id @unique
+  id        String    @id @unique
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  cpf       String   @unique
+  cpf       String    @unique
   role      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  profiles  Profile[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Profile {
+  id     String  @id @unique
+  name   String
+  image  String
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+  Channel   Channel? @relation(fields: [channelId], references: [id])
+  channelId String?
+}
+
+model Channel {
+  id         String    @id @unique
+  name       String
+  lesson     String
+  subscribed Profile[]
 }

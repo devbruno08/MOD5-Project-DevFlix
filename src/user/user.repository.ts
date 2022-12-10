@@ -4,6 +4,7 @@ import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { IUserEntity } from './entities/user.entity';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
+import { UserDto } from './services/dto/userInput.dto';
 
 @Injectable()
 export class UserRepository {
@@ -11,8 +12,11 @@ export class UserRepository {
 
   async createUser(user: IUserEntity): Promise<IUserEntity> {
     try {
-      const CreateUser = await this.prisma.user.create({ data: user });
-      return CreateUser;
+      const CreateUser = await this.prisma.user.create({
+        data: user,
+        include:{profiles: true},
+      });
+      return CreateUser
     } catch (err) {
       throw new Exception(
         Exceptions.DatabaseExceptions,
@@ -26,6 +30,8 @@ export class UserRepository {
       const UpdateUser = await this.prisma.user.update({
         where: { id: user.id },
         data: user,
+        include:{profiles: true},
+        
       });
       return UpdateUser;
     } catch (err) {
@@ -37,6 +43,7 @@ export class UserRepository {
     try {
       const DeleteUser = await this.prisma.user.delete({
         where: { id: id },
+        include:{profiles: true},
       });
       return DeleteUser;
     } catch (err) {
@@ -46,7 +53,8 @@ export class UserRepository {
 
   async findAllUsers(): Promise<IUserEntity[]> {
     try {
-      const AllUsers = await this.prisma.user.findMany();
+      const AllUsers = await this.prisma.user.findMany({include: { profiles: true }});
+      
       return AllUsers;
     } catch (err) {
       throw new Exception(Exceptions.DatabaseExceptions);

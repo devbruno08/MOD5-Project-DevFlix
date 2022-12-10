@@ -1,28 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { UserService } from 'src/user/services/user.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { IProfile } from './entities/profile.entity';
+import { ProfileRepository } from './profile.repository';
 
 @Injectable()
 export class ProfileService {
-  constructor(private readonly userService: UserService){}
-  async create(createProfileDto: CreateProfileDto) {
-    await this.userService.getUserById(createProfileDto.userId)
+  constructor(private readonly profileRepository: ProfileRepository) {}
+  async createProfile(profile: CreateProfileDto): Promise<IProfile> {
+    const profileEntity = { ...profile, id: randomUUID() }; 
+    const createdProfile = await this.profileRepository.createProfile(
+      profileEntity,
+    );
+    return createdProfile;
   }
 
-  async findAll() {
-    return `This action returns all profile`;
+  async updateProfile(Profile: UpdateProfileDto): Promise<IProfile> {
+    const updatedProfile = await this.profileRepository.updateProfile(Profile);
+    return updatedProfile;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async getAllProfiles(): Promise<IProfile[]> {
+    return await this.profileRepository.findAllProfiles();
   }
 
-  async update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
+  async deleteProfileById(profileId: string): Promise<boolean> {
+    try {
+      const Profile = await this.profileRepository.deleteProfile(profileId);
+      if (Profile) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} profile`;
+  async getProfileById(profileId: string): Promise<IProfile> {
+    const ProfileById = await this.profileRepository.getProfileById(profileId);
+    return ProfileById;
   }
 }

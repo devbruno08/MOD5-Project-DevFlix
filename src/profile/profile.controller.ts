@@ -1,34 +1,74 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
+import { IProfile } from './entities/profile.entity';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('profile')
+@ApiTags('Profile')
+@Controller()
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) {}
-
-  @Post()
-  create(@Body() createProfileDto: CreateProfileDto) {
-    return this.profileService.create(createProfileDto);
-  }
+  constructor(private service: ProfileService) {}
 
   @Get()
-  findAll() {
-    return this.profileService.findAll();
+  async getAllProfiles(): Promise<IProfile[]> {
+    return await this.service.getAllProfiles();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profileService.findOne(+id);
+  async getProfileById(@Param('id') Id: string): Promise<IProfile> {
+    try {
+      return await this.service.getProfileById(Id);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profileService.update(+id, updateProfileDto);
+  @Post()
+  async createProfile(
+    @Body() { name, image, userId }: IProfile,
+    @Res() response: Response,
+  ): Promise<void> {
+    try {
+      const result = await this.service.createProfile({
+        name,
+        image,
+        userId,
+      });
+
+      response.status(201).send(result);
+    } catch (err) {
+      HandleException(err);
+    }
+  }
+
+  @Patch()
+  async updateProfile(@Body() profileData: UpdateProfileDto): Promise<IProfile> {
+    try {
+      return await this.service.updateProfile(profileData);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profileService.remove(+id);
+  async deleteProfileById(@Param('id') Id: string): Promise<string> {
+    const profileIsDeleted = await this.service.deleteProfileById(Id);
+    if (profileIsDeleted) {
+      return 'Deleted successfully';
+    } else {
+      return 'User not found';
+    }
   }
 }
