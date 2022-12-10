@@ -5,6 +5,7 @@ import { PartialUserDto } from './dto/partialUserInput.dto';
 import { UserRepository } from '../user.repository';
 import { Injectable } from '@nestjs/common';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { Exception } from 'src/utils/exceptions/exception';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,7 @@ export class UserService {
   async createUser(user: UserDto): Promise<IUserEntity> {
     const userEntity = { ...user, id: randomUUID() };
     if (user.password.length <= 7) {
-      throw { message: 'Invalid Password', exception: Exceptions.InvalidData, };
+      throw new Exception(Exceptions.InvalidData, 'Invalid Password');
     }
     const createdUser = await this.userRepository.createUser(userEntity);
     return createdUser;

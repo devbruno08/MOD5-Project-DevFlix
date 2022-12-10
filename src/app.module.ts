@@ -3,9 +3,11 @@ import { DatabaseModule } from './prisma/database.module';
 import { UserService } from './user/services/user.service';
 import { UserController } from './user/user.controller';
 import { UserRepository } from './user/user.repository';
+import { ProfileModule } from './profile/profile.module';
+import { ChannelModule } from './channel/channel.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ProfileModule, ChannelModule],
   controllers: [UserController],
   providers: [UserService, UserRepository],
 })
