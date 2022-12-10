@@ -8,7 +8,6 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { IHttpResponse } from 'src/utils/httpResponse';
 import { IUserEntity } from './entities/user.entity';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
 import { UserDto } from './services/dto/userInput.dto';
@@ -36,7 +35,7 @@ export class UserController {
 
   @Post()
   async createUser(
-    @Body() { cpf, email, password, name, role }: UserDto,
+    @Body() { cpf, email, password, name, profiles, role }: UserDto,
     @Res() response: Response,
   ) {
     try {
@@ -45,6 +44,7 @@ export class UserController {
         email,
         password,
         name,
+        profiles,
         role,
       });
 

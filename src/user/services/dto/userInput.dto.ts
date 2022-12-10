@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IProfile } from 'src/profile/entities/profile.entity';
 
 export class UserDto {
   @ApiProperty()
@@ -21,6 +22,9 @@ export class UserDto {
   @IsString()
   @IsNotEmpty()
   cpf: string;
+  
+  @ApiProperty()
+  profiles: IProfile[];
 
   @ApiProperty()
   @IsString()

@@ -1,5 +1,5 @@
 import { CreateProfileDto } from "../dto/create-profile.dto";
 
-export class Profile extends CreateProfileDto {
+export class IProfile extends CreateProfileDto {
     id: string;
 }
