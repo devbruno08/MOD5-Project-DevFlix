@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { UserService } from 'src/user/services/user.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { IProfile } from './entities/profile.entity';
@@ -10,7 +9,7 @@ import { ProfileRepository } from './profile.repository';
 export class ProfileService {
   constructor(private readonly profileRepository: ProfileRepository) {}
   async createProfile(profile: CreateProfileDto): Promise<IProfile> {
-    const profileEntity = { ...profile, id: randomUUID() }; 
+    const profileEntity = { ...profile, id: randomUUID() };
     const createdProfile = await this.profileRepository.createProfile(
       profileEntity,
     );

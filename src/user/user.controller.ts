@@ -12,7 +12,7 @@ import { IUserEntity } from './entities/user.entity';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
 import { UserDto } from './services/dto/userInput.dto';
 import { UserService } from './services/user.service';
-import { Response } from 'express'
+import { Response } from 'express';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -39,10 +39,7 @@ export class UserController {
   async createUser(
     @Body() { cpf, email, password, name, role }: UserDto,
     @Res() response: Response,
-  
-    ) 
-    : Promise<void>
-    {
+  ): Promise<void> {
     try {
       const result = await this.service.createUser({
         cpf,

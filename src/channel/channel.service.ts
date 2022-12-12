@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { ChannelRepository } from './channel.repository';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
+import { IChannel } from './entities/channel.entity';
 
 @Injectable()
 export class ChannelService {
-  create(createChannelDto: CreateChannelDto) {
-    return 'This action adds a new channel';
+  constructor(private readonly channelRepository: ChannelRepository) {}
+
+  async createChannel(channel: CreateChannelDto): Promise<IChannel> {
+    const channelEntity = { ...channel, id: randomUUID() };
+    const createdChannel = await this.channelRepository.createChannel(
+      channelEntity,
+    );
+    return createdChannel;
   }
 
-  findAll() {
-    return `This action returns all channel`;
+  async updateChannel(Channel: UpdateChannelDto): Promise<IChannel> {
+    const updatedChannel = await this.channelRepository.updateChannel(Channel);
+    return updatedChannel;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} channel`;
+  async getAllChannels(): Promise<IChannel[]> {
+    return await this.channelRepository.findAllChannels();
   }
 
-  update(id: number, updateChannelDto: UpdateChannelDto) {
-    return `This action updates a #${id} channel`;
+  async deleteChannelById(channelId: string): Promise<boolean> {
+    try {
+      const Channel = await this.channelRepository.deleteChannel(channelId);
+      if (Channel) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} channel`;
+  async getChannelById(channelId: string): Promise<IChannel> {
+    const ChannelById = await this.channelRepository.getChannelById(channelId);
+    return ChannelById;
   }
 }

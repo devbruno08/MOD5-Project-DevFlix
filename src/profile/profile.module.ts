@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { ProfileController } from './profile.controller';
 import { ProfileRepository } from './profile.repository';
-import { DatabaseModule } from 'src/prisma/database.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({

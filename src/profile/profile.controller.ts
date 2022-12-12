@@ -13,7 +13,6 @@ import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { IProfile } from './entities/profile.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileService } from './profile.service';
-import { CreateProfileDto } from './dto/create-profile.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Profile')
