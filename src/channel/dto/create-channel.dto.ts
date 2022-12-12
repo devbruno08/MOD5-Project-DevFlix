@@ -1,4 +1,3 @@
-import { IProfile } from 'src/profile/entities/profile.entity';
 import { IsString, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -13,7 +12,3 @@ export class CreateChannelDto {
   @IsNotEmpty()
   lesson: string;
 }
-
-//     @ApiProperty()
-//     subscribed: IProfile[];
-// }

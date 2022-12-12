@@ -16,9 +16,4 @@ export class CreateProfileDto {
   @IsString()
   @IsNotEmpty()
   image: string;
-
-  // @ApiProperty()
-  // @IsString()
-  // @IsNotEmpty()
-  // channelId: string;
 }

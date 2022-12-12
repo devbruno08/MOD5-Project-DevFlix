@@ -22,10 +22,6 @@ export class UserDto {
   @IsNotEmpty()
   cpf: string;
 
-  // @ApiProperty()
-  // profiles: IProfile[];
-  
-
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
