@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt/dist";
 import { PassportModule } from "@nestjs/passport";
 import { DatabaseModule } from "src/prisma/database.module";
@@ -14,6 +15,7 @@ import { AuthService } from "./auth.service";
             secret: process.env.SECRET_KEY,
             signOptions: { expiresIn: '24h'},
         }),
+        ConfigModule.forRoot(),
         DatabaseModule,
     ],
     controllers: [Auth],

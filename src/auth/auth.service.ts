@@ -16,15 +16,15 @@ export class AuthService {
 
   async validateUser({ email, password }: UserLoginDto) {
     const user = await this.userService.findUserByEmail(email);
-    const passwordIsValid = await compare(user.password, password);
+    const passwordIsValid = await compare(password, user.password);
     if (!passwordIsValid) {
       throw new Exception(Exceptions.UnauthorizedException, 'Invalid passwprd');
     }
     delete user.password;
 
     return {
-        token: this.jwtService.sign(user),
-        user,
+      token: this.jwtService.sign(user),
+      user,
     };
   }
 

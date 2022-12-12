@@ -53,6 +53,7 @@ export class UserService {
   }
 
   async findUserByEmail(email: string): Promise<IUserEntity> {
-    throw new Error("Not implemented");
+    const user = await this.userRepository.findUserByEmail(email);
+    return user;
   }
 }
