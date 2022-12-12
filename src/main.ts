@@ -12,6 +12,7 @@ async function bootstrap() {
     .setDescription('The DevFlix API description')
     .setVersion('1.0')
     .addTag('User')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

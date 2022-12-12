@@ -6,6 +6,7 @@ import { UserRepository } from '../user.repository';
 import { Injectable } from '@nestjs/common';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { Exception } from 'src/utils/exceptions/exception';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -16,6 +17,9 @@ export class UserService {
     if (user.password.length <= 7) {
       throw new Exception(Exceptions.InvalidData, 'Invalid Password');
     }
+    const hashedPassword = await hash(user.password, 10);
+    userEntity.password = hashedPassword;
+
     const createdUser = await this.userRepository.createUser(userEntity);
     return createdUser;
   }
@@ -46,5 +50,9 @@ export class UserService {
   async getUserById(userId: string): Promise<IUserEntity> {
     const UserById = await this.userRepository.findUserById(userId);
     return UserById;
+  }
+
+  async findUserByEmail(email: string): Promise<IUserEntity> {
+    throw new Error("Not implemented");
   }
 }
