@@ -18,7 +18,7 @@ export class AuthService {
     const user = await this.userService.findUserByEmail(email);
     const passwordIsValid = await compare(password, user.password);
     if (!passwordIsValid) {
-      throw new Exception(Exceptions.UnauthorizedException, 'Invalid passwprd');
+      throw new Exception(Exceptions.UnauthorizedException, 'Invalid password');
     }
     delete user.password;
 

@@ -24,14 +24,12 @@ import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 export class UserController {
   constructor(private service: UserService) {}
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Get()
   async getAllUser(): Promise<IUserEntity[]> {
     return await this.service.getAllUsers();
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Get(':id')
   async getUserById(@Param('id') Id: string): Promise<IUserEntity> {
@@ -42,7 +40,6 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Post()
   async createUser(
@@ -64,7 +61,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Patch()
   async updateUser(@Body() userData: PartialUserDto): Promise<IUserEntity> {
     try {
@@ -74,7 +71,6 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Delete(':id')
   async deleteUserById(@Param('id') Id: string): Promise<string> {

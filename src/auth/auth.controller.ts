@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Request, UseGuards } from '@nestjs/common/decorators';
+import { UseGuards } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IUserEntity } from 'src/user/entities/user.entity';
@@ -24,7 +24,6 @@ export class Auth {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   async getUser(@userLogged() user: IUserEntity) {
     return user;

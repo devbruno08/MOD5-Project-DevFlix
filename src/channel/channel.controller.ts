@@ -23,14 +23,12 @@ import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 export class ChannelController {
   constructor(private service: ChannelService) {}
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Get()
   async getAllChannels(): Promise<IChannel[]> {
     return await this.service.getAllChannels();
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Get(':id')
   async getChannelId(@Param('id') Id: string): Promise<IChannel> {
@@ -41,7 +39,6 @@ export class ChannelController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Post()
   async createChannel(
@@ -60,7 +57,6 @@ export class ChannelController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Patch()
   async updateChannel(
@@ -73,7 +69,6 @@ export class ChannelController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Delete(':id')
   async deleteChannelById(@Param('id') Id: string): Promise<string> {

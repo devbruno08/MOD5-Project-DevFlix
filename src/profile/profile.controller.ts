@@ -25,14 +25,12 @@ import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 export class ProfileController {
   constructor(private service: ProfileService) {}
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Get()
   async getAllProfiles(): Promise<IProfile[]> {
     return await this.service.getAllProfiles();
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Get(':id')
   async getProfileById(@Param('id') Id: string): Promise<IProfile> {
@@ -43,7 +41,6 @@ export class ProfileController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Post()
   async createProfile(
@@ -63,7 +60,6 @@ export class ProfileController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Patch()
   async updateProfile(@Body() profileData: UpdateProfileDto): Promise<IProfile> {
@@ -74,7 +70,6 @@ export class ProfileController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
   @Delete(':id')
   async deleteProfileById(@Param('id') Id: string): Promise<string> {
