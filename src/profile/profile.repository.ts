@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
-import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { IProfile } from './entities/profile.entity';
 
@@ -14,6 +13,7 @@ export class ProfileRepository {
     try {
       const CreateProfile = await this.prisma.profile.create({
         data: profile,
+        include: { Channel: true },
       });
       return CreateProfile;
     } catch (err) {
@@ -29,6 +29,7 @@ export class ProfileRepository {
       const UpdateProfile = await this.prisma.profile.update({
         where: { id: profile.id },
         data: profile,
+        include: { Channel: true },
       });
       return UpdateProfile;
     } catch (err) {
@@ -40,6 +41,7 @@ export class ProfileRepository {
     try {
       const DeleteProfile = await this.prisma.profile.delete({
         where: { id: id },
+        include: { Channel: true },
       });
       return DeleteProfile;
     } catch (err) {
@@ -49,7 +51,10 @@ export class ProfileRepository {
 
   async findAllProfiles(): Promise<IProfile[]> {
     try {
-      const AllProfiles = await this.prisma.profile.findMany();
+      const AllProfiles = await this.prisma.profile.findMany({
+        include: { Channel: true },
+      });
+
       return AllProfiles;
     } catch (err) {
       throw new Exception(Exceptions.DatabaseExceptions);
@@ -60,6 +65,7 @@ export class ProfileRepository {
     try {
       const ProfileById = await this.prisma.profile.findUniqueOrThrow({
         where: { id: id },
+        include: { Channel: true },
       });
       return ProfileById;
     } catch (err) {

@@ -9,12 +9,9 @@ import { IChannel } from './entities/channel.entity';
 export class ChannelService {
   constructor(private readonly channelRepository: ChannelRepository) {}
 
-  async createChannel(channel: CreateChannelDto): Promise<IChannel> {
-    const channelEntity = { ...channel, id: randomUUID() };
-    const createdChannel = await this.channelRepository.createChannel(
-      channelEntity,
-    );
-    return createdChannel;
+  async createChannel(createChannelDto: CreateChannelDto): Promise<IChannel> {
+    const id = randomUUID();
+    return await this.channelRepository.createChannel(createChannelDto, id);
   }
 
   async updateChannel(Channel: UpdateChannelDto): Promise<IChannel> {

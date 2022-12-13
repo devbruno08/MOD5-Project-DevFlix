@@ -12,6 +12,6 @@ import { PassportModule } from '@nestjs/passport';
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [ProfileController],
-  providers: [ProfileService, ProfileRepository, PrismaService]
+  providers: [ProfileService, ProfileRepository, PrismaService],
 })
 export class ProfileModule {}

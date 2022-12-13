@@ -23,11 +23,11 @@ model User {
 }
 
 model Profile {
-  id     String  @id @unique
-  name   String
-  image  String
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String?
+  id        String   @id @unique
+  name      String
+  image     String
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
   Channel   Channel? @relation(fields: [channelId], references: [id])
   channelId String?
 }

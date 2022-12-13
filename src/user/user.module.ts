@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-// import { PassportModule } from "@nestjs/passport";
 import { DatabaseModule } from 'src/prisma/database.module';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
@@ -13,5 +12,6 @@ import { PassportModule } from '@nestjs/passport';
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],
+  exports: [UserService],
 })
 export class UserModule {}

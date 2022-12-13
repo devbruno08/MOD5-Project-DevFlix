@@ -11,4 +11,7 @@ export class CreateChannelDto {
   @IsString()
   @IsNotEmpty()
   lesson: string;
+
+  @ApiProperty()
+  profileIds?: string[];
 }

@@ -2,20 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 import { IChannel } from './entities/channel.entity';
 
 @Injectable()
 export class ChannelRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  private dataToReturn = {
+    subscribed: true,
+  };
 
-  async createChannel(channel: IChannel): Promise<IChannel> {
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async createChannel(
+    { name, lesson }: CreateChannelDto,
+    id: string,
+  ): Promise<IChannel> {
     try {
-      const CreateChannel = await this.prisma.channel.create({
-        data: channel,
-        include: { subscribed: true },
+      return await this.prismaService.channel.create({
+        data: {
+          id: id,
+          name: name,
+          lesson: lesson,
+        },
+        include: this.dataToReturn,
       });
-      return CreateChannel;
     } catch (err) {
       throw new Exception(
         Exceptions.DatabaseExceptions,
@@ -24,14 +35,21 @@ export class ChannelRepository {
     }
   }
 
-  async updateChannel(channel: UpdateChannelDto): Promise<IChannel> {
+  async updateChannel(updateData: UpdateChannelDto): Promise<IChannel> {
     try {
-      const UpdateChannel = await this.prisma.channel.update({
-        where: { id: channel.id },
-        data: channel,
-        include: { subscribed: true },
+      const subscribedIds = updateData.profileIds;
+
+      delete updateData.profileIds;
+
+      return await this.prismaService.channel.update({
+        where: { id: updateData.id },
+        data: {
+          subscribed: {
+            connect: subscribedIds?.map((id) => ({ id: id })),
+          },
+        },
+        include: this.dataToReturn,
       });
-      return UpdateChannel;
     } catch (err) {
       throw new Exception(Exceptions.DatabaseExceptions);
     }
@@ -39,11 +57,10 @@ export class ChannelRepository {
 
   async deleteChannel(id: string): Promise<IChannel> {
     try {
-      const DeleteChannel = await this.prisma.channel.delete({
+      return await this.prismaService.channel.delete({
         where: { id: id },
-        include: { subscribed: true },
+        include: this.dataToReturn,
       });
-      return DeleteChannel;
     } catch (err) {
       throw new Exception(Exceptions.DatabaseExceptions, 'User not found!');
     }
@@ -51,11 +68,9 @@ export class ChannelRepository {
 
   async findAllChannels(): Promise<IChannel[]> {
     try {
-      const AllChannels = await this.prisma.channel.findMany({
-        include: { subscribed: true },
+      return await this.prismaService.channel.findMany({
+        include: this.dataToReturn,
       });
-
-      return AllChannels;
     } catch (err) {
       throw new Exception(Exceptions.DatabaseExceptions);
     }
@@ -63,10 +78,10 @@ export class ChannelRepository {
 
   async getChannelById(id: string): Promise<IChannel> {
     try {
-      const ChannelById = await this.prisma.channel.findUniqueOrThrow({
+      return await this.prismaService.channel.findUnique({
         where: { id: id },
+        include: this.dataToReturn,
       });
-      return ChannelById;
     } catch (err) {
       throw new Exception(Exceptions.DatabaseExceptions);
     }

@@ -18,10 +18,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 
-
 @Controller('Profile')
 @ApiTags('Profile')
-
 export class ProfileController {
   constructor(private service: ProfileService) {}
 
@@ -62,7 +60,9 @@ export class ProfileController {
 
   @ApiBearerAuth()
   @Patch()
-  async updateProfile(@Body() profileData: UpdateProfileDto): Promise<IProfile> {
+  async updateProfile(
+    @Body() profileData: UpdateProfileDto,
+  ): Promise<IProfile> {
     try {
       return await this.service.updateProfile(profileData);
     } catch (err) {
