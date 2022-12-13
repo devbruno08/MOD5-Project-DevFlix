@@ -7,24 +7,33 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { IProfile } from './entities/profile.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileService } from './profile.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 
+
+@Controller('Profile')
 @ApiTags('Profile')
-@Controller()
+
 export class ProfileController {
   constructor(private service: ProfileService) {}
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Get()
   async getAllProfiles(): Promise<IProfile[]> {
     return await this.service.getAllProfiles();
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Get(':id')
   async getProfileById(@Param('id') Id: string): Promise<IProfile> {
     try {
@@ -34,6 +43,8 @@ export class ProfileController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Post()
   async createProfile(
     @Body() { name, image, userId }: IProfile,
@@ -52,6 +63,8 @@ export class ProfileController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Patch()
   async updateProfile(@Body() profileData: UpdateProfileDto): Promise<IProfile> {
     try {
@@ -61,6 +74,8 @@ export class ProfileController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Delete(':id')
   async deleteProfileById(@Param('id') Id: string): Promise<string> {
     const profileIsDeleted = await this.service.deleteProfileById(Id);

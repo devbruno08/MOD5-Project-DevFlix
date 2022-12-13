@@ -2,8 +2,12 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Request, UseGuards } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { IUserEntity } from 'src/user/entities/user.entity';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { AuthService } from './auth.service';
 import { UserLoginDto } from './dto/user-login.dto';
+import { userLogged } from './decorators/user-logged.decorator';
+import { IsAdminAuthorization } from './decorators/is-admin.decorator';
 
 @Controller('Authorization')
 @ApiTags('Auth')
@@ -12,13 +16,18 @@ export class Auth {
 
   @Post('login')
   async login(@Body() data: UserLoginDto) {
-    return await this.authservice.validateUser(data);
+    try {
+      return await this.authservice.validateUser(data);
+    } catch (error) {
+      HandleException(error);
+    }
   }
 
-  @UseGuards(AuthGuard())
   @Get()
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
   @ApiBearerAuth()
-  async getUser(@Request() req) {
-    console.log(req);
+  async getUser(@userLogged() user: IUserEntity) {
+    return user;
   }
 }
+

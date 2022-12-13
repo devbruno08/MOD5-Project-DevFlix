@@ -7,24 +7,31 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ChannelService } from './channel.service';
 import { IChannel } from './entities/channel.entity';
 import { UpdateChannelDto } from './dto/update-channel.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 
+@Controller('Channel')
 @ApiTags('Channel')
-@Controller()
 export class ChannelController {
   constructor(private service: ChannelService) {}
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Get()
   async getAllChannels(): Promise<IChannel[]> {
     return await this.service.getAllChannels();
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Get(':id')
   async getChannelId(@Param('id') Id: string): Promise<IChannel> {
     try {
@@ -34,6 +41,8 @@ export class ChannelController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Post()
   async createChannel(
     @Body() { name, lesson }: IChannel,
@@ -51,6 +60,8 @@ export class ChannelController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Patch()
   async updateChannel(
     @Body() channelData: UpdateChannelDto,
@@ -62,6 +73,8 @@ export class ChannelController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Delete(':id')
   async deleteChannelById(@Param('id') Id: string): Promise<string> {
     const channelIsDeleted = await this.service.deleteChannelById(Id);
