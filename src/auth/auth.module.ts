@@ -7,6 +7,7 @@ import { UserService } from "src/user/services/user.service";
 import { UserRepository } from "src/user/user.repository";
 import { Auth } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { AuthStrategy } from "./auth.strategy";
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { AuthService } from "./auth.service";
         DatabaseModule,
     ],
     controllers: [Auth],
-    providers: [AuthService, UserService, UserRepository],
+    providers: [AuthService, UserService, UserRepository, AuthStrategy],
 
 })
     

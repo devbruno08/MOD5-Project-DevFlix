@@ -15,7 +15,7 @@ import { ChannelService } from './channel.service';
 import { IChannel } from './entities/channel.entity';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
-@ApiTags('Profile')
+@ApiTags('Channel')
 @Controller()
 export class ChannelController {
   constructor(private service: ChannelService) {}
